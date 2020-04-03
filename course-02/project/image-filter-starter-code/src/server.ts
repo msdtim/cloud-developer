@@ -28,6 +28,20 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   //   the filtered image file [!!TIP res.sendFile(filteredpath); might be useful]
 
   /**************************************************************************** */
+  app.get( "/filteredimage/", async ( req, res ) => {
+    let { image_url } = req.query;
+    if (!image_url) {
+      res.status(400).send("image url is required");
+    }
+    await filterImageFromURL(image_url)
+      .then(result => { 
+        const filteredFile = result
+        res.sendFile(filteredFile, (err) => {
+          err ? res.status(500).send("Internal Server Error") : deleteLocalFiles([filteredFile]);
+        });})
+      .catch(err => {res.status(422).send("Unprocessable Entity")});
+  } );
+
 
   //! END @TODO1
   
