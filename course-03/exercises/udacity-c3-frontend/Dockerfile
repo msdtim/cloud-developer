@@ -1,5 +1,5 @@
 ## Build
-FROM beevelop/ionic AS ionic
+FROM beevelop/ionic:next AS ionic
 # Create app directory
 WORKDIR /usr/src/app
 # Install app dependencies
