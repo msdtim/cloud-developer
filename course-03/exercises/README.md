@@ -1,53 +1,126 @@
-# Udagram Image Filtering Microservice
+# Refactor Udagram App into Microservices and Deploy
+[![Build Status](https://travis-ci.com/msdtim/cloud-developer.svg?branch=master)](https://travis-ci.com/msdtim/cloud-developer)
 
-Udagram is a simple cloud application developed alongside the Udacity Cloud Engineering Nanodegree. It allows users to register and log into a web client, post photos to the feed, and process photos using an image filtering microservice.
-
-The project is split into three parts:
-1. [The Simple Frontend](/udacity-c3-frontend)
-A basic Ionic client web application which consumes the RestAPI Backend. 
-2. [The RestAPI Feed Backend](/udacity-c3-restapi-feed), a Node-Express feed microservice.
-3. [The RestAPI User Backend](/udacity-c3-restapi-user), a Node-Express user microservice.
-
-## Getting Setup
-
-> _tip_: this frontend is designed to work with the RestAPI backends). It is recommended you stand up the backend first, test using Postman, and then the frontend should integrate.
-
-### Installing Node and NPM
-This project depends on Nodejs and Node Package Manager (NPM). Before continuing, you must download and install Node (NPM is included) from [https://nodejs.com/en/download](https://nodejs.org/en/download/).
-
-### Installing Ionic Cli
-The Ionic Command Line Interface is required to serve and build the frontend. Instructions for installing the CLI can be found in the [Ionic Framework Docs](https://ionicframework.com/docs/installation/cli).
-
-### Installing project dependencies
-
-This project uses NPM to manage software dependencies. NPM Relies on the package.json file located in the root of this repository. After cloning, open your terminal and run:
-```bash
-npm install
+My docker repo: [Docker Hub](https://hub.docker.com/u/msdtim)
+## Get Started
+For setting up the local develop environment and run the code locally, please refer to Get Started.md
+## Environment Variables
+Make sure all the following environment variables are properly set.
 ```
->_tip_: **npm i** is shorthand for **npm install**
-
-### Setup Backend Node Environment
-You'll need to create a new node server. Open a new terminal within the project directory and run:
-1. Initialize a new project: `npm init`
-2. Install express: `npm i express --save`
-3. Install typescript dependencies: `npm i ts-node-dev tslint typescript  @types/bluebird @types/express @types/node --save-dev`
-4. Look at the `package.json` file from the RestAPI repo and copy the `scripts` block into the auto-generated `package.json` in this project. This will allow you to use shorthand commands like `npm run dev`
-
-
-### Configure The Backend Endpoint
-Ionic uses enviornment files located in `./src/enviornments/enviornment.*.ts` to load configuration variables at runtime. By default `environment.ts` is used for development and `enviornment.prod.ts` is used for produciton. The `apiHost` variable should be set to your server url either locally or in the cloud.
-
-***
-### Running the Development Server
-Ionic CLI provides an easy to use development server to run and autoreload the frontend. This allows you to make quick changes and see them in real time in your browser. To run the development server, open terminal and run:
-
-```bash
-ionic serve
+export POSTGRESS_USERNAME=udagrammodev
+export POSTGRESS_PASSWORD=XXXXXXXX
+export POSTGRESS_DB=udagrammodev
+export POSTGRESS_HOST=udagrammodev.cwgjvyl1afii.us-east-1.rds.amazonaws.com
+export AWS_REGION=us-east-1
+export AWS_PROFILE=default
+export AWS_MEDIA_BUCKET=udagram-msdtim-dev2
+export AWS_BUCKET=udagram-msdtim-dev2
+export JWT_SECRET=helloworld
+export URL=http://localhost:8100
 ```
+## Divide the application into smaller services
+The starter code has already done the splitting. The applicate is divided to three microserivces and one proxy.
+1. The Simple Frontend, A basic Ionic client web application which consumes the RestAPI Backend. `./udacity-c3-frontend/`
+2. The RestAPI Feed Backend, a Node-Express feed microservice. `./udacity-c3-restapi-feed/`
+3. The RestAPI User Backend, a Node-Express user microservice. `./udacity-c3-restapi-user/`
+4. Reverse proxy, a Nginx proxy to guild traffic to the two backend services. `./udacity-c3-deployment/docker/`
 
-### Building the Static Frontend Files
-Ionic CLI can build the frontend into static HTML/CSS/JavaScript files. These files can be uploaded to a host to be consumed by users on the web. Build artifacts are located in `./www`. To build from source, open terminal and run:
-```bash
-ionic build
+## Containerize Application
+### Create and edit Dockerfile for each service.
+### Create docker images
+For each microservice, run the following commands within its directory.
+
+Frontend:
 ```
-***
+## cd to frontend dir
+docker build -t msdtim/udacity-frontend .
+## cd ../udacity-restapi-feed
+docker build -t msdtim/udacity-restapi-feed .
+## cd ../udacity-restapi-user
+docker build -t msdtim/udacity-restapi-user .
+## cd ../udacity-c3-deployment/docker
+docker build -t msdtim/reverseproxy .
+```
+We can run the newly created images by,
+```
+docker run --rm --publish 8080:8080 -v $HOME/.aws:/root/.aws --env POSTGRESS_HOST=$POSTGRESS_HOST --env POSTGRESS_USERNAME=$POSTGRESS_USERNAME --env POSTGRESS_PASSWORD=$POSTGRESS_PASSWORD --env POSTGRESS_DB=$POSTGRESS_DB --env AWS_REGION=$AWS_REGION --env AWS_PROFILE=$AWS_PROFILE --env AWS_BUCKET=$AWS_BUCKET --env JWT_SECRET=$JWT_SECRET --env URL=$URL --name feed msdtim/udacity-restapi-feed
+```
+We can interact with the backend with Postman.
+
+To interact using a front end, open another shall window and run:
+```
+docker run --rm --publish 8100:80 --name frontend msdtim/udacity-frontend
+```
+**Troubleshoot:**
+> Http failure response for http://localhost:8080/api/v0/feed: 0 Unknown Error  
+
+Make sure the `--env URL=$URL`  is in backend run command.
+And the `--publish 8100:80` is set correctly for the frontend
+
+### Docker compose and publish
+Go to `./udacity-c3-deployment/docker/`
+
+The services are defined in `docker-compose.yaml`
+
+nd the build information is defined in `docker-compose-build.yaml`
+
+Build and publish the docker images by
+```
+docker-compose -f docker-compose-build.yaml build --parallel
+docker-compose -f docker-compose-build.yaml push
+```
+Run all the image together without the need to open multiple	shell.
+```
+docker-compose up
+```
+## Deploy to Kubernetes cluster
+### Provision infrastructure using Terraform and install Kubernetes  on AWS using KubeOne 
+https://github.com/kubermatic/kubeone/blob/master/docs/quickstart-aws.md
+View related files are in: `./udacity-c3-deployment/aws/`
+**Troubleshoot:** When `terraform apply`
+> Error: Error launching source instance: UnauthorizedOperation: You are not authorized to perform this operation.  
+
+1. If you are using AWS Educate/Student account, there are certain restrictions on what kinds of EC2 instance you can provision, the default `t3.medium` is not available. I tried different kinds of machines but was not able to get it stood up. So I go back to the regular Free Tier AWS account. **Note: `t3.medium` dose not count towards in the Free Tier 750hr quota. It costs real $$. Don’t forget to turn it down.**
+2. Temporarily add AdministratorAccess to your IAM user.
+### Deploy service to Kubernetes
+Update all the files in `./udacity-c3-deployment/k8s/`
+
+Run the following commands in the exact order,
+```
+kubectl apply -f env-configmap.yaml
+kubectl apply -f env-secret.yaml
+kubectl apply -f aws-secret.yaml
+kubectl apply -f backend-feed-deployment.yaml
+kubectl apply -f backend-feed-service.yaml
+kubectl apply -f backend-user-deployment.yaml
+kubectl apply -f backend-user-service.yaml
+kubectl apply -f frontend-deployment.yaml
+kubectl apply -f frontend-service.yaml
+kubectl apply -f reverseproxy-deployment.yaml
+kubectl apply -f reverseproxy-service.yaml
+```
+You can run `kubectl get pods` in between to check if the service is successfully spin up.
+**Troubleshoot:**  
+> Pod status: CrashLoopBackOff  
+
+Use `kubectl logs <your_pod_name>` to check what is causing the crash.
+
+For me, I forgot the `-n` when converting the credential to base64.
+
+The correct usage is 
+`echo -n <your_credential> | base64`
+### Port-forwarding to connect to the service.
+In two shall windows (your pod postfix will be different):
+```
+kubectl port-forward reverseproxy-5976c55bf5-w8wcp 8080:8080
+```
+```
+kubectl port-forward frontend-64d4978694-nh5fm 8100:80 
+```
+## Travis CI/CD
+Add `.travis.yml` in the repo root directory.
+
+The build status page: https://travis-ci.com/msdtim/cloud-developer
+
+Build badge:[![Build Status](https://travis-ci.com/msdtim/cloud-developer.svg?branch=master)](https://travis-ci.com/msdtim/cloud-developer)
+
