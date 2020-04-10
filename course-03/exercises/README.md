@@ -3,7 +3,7 @@
 
 My docker repo: [Docker Hub](https://hub.docker.com/u/msdtim)
 ## Get Started
-For setting up the local develop environment and run the code locally, please refer to Get Started.md
+For setting up the local develop environment and run the code locally, please refer to [Get Started.md](https://github.com/msdtim/cloud-developer/blob/master/course-03/exercises/Get%20Started.md)
 ## Environment Variables
 Make sure all the following environment variables are properly set.
 ```
@@ -76,7 +76,9 @@ docker-compose up
 ## Deploy to Kubernetes cluster
 ### Provision infrastructure using Terraform and install Kubernetes  on AWS using KubeOne 
 https://github.com/kubermatic/kubeone/blob/master/docs/quickstart-aws.md
+
 View related files are in: `./udacity-c3-deployment/aws/`
+
 **Troubleshoot:** When `terraform apply`
 > Error: Error launching source instance: UnauthorizedOperation: You are not authorized to perform this operation.  
 
