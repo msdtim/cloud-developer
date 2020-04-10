@@ -1,20 +1,25 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     service: reverseproxy
+    version: v2
   name: reverseproxy
 spec:
   replicas: 2
+  selector:
+    matchLabels:
+      service: reverseproxy
   template:
     metadata:
       labels:
         service: reverseproxy
+        version: v2
     spec:
       containers:
-      - image: scheele/reverseproxy
+      - image: msdtim/reverseproxy
         name: reverseproxy
-        imagePullPolicy: Always          
+        imagePullPolicy: Always   
         resources:
           requests:
             memory: "64Mi"
