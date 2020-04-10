@@ -1,6 +1,7 @@
 # Cloud Developer Nanodegree Program
-Courses and projects for completing the nanodegree.
 [![Build Status](https://travis-ci.com/msdtim/cloud-developer.svg?branch=master)](https://travis-ci.com/msdtim/cloud-developer)
+
+Courses and projects for completing the nanodegree.
 
 ## Course 1: Cloud Fundamentals
  Project:  [Deploy Static Website on AWS](https://classroom.udacity.com/nanodegrees/nd9990/parts/4bf365d7-4a50-4fc0-aee3-30ad1e60c15d/modules/1cf10ed1-e953-4911-8d27-982d6ae97ae1/lessons/cc6eb870-02d0-4825-8fae-b552bd531c7c/project) 
