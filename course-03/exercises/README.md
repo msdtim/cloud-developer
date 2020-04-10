@@ -29,6 +29,7 @@ The starter code has already done the splitting. The applicate is divided to thr
 ### Create and edit Dockerfile for each service.
 ### Create docker images
 For each microservice, run the following commands within its directory.
+
 Frontend:
 ```
 ## cd to frontend dir
@@ -58,8 +59,11 @@ And the `--publish 8100:80` is set correctly for the frontend
 
 ### Docker compose and publish
 Go to `./udacity-c3-deployment/docker/`
+
 The services are defined in `docker-compose.yaml`
-And the build information is defined in `docker-compose-build.yaml`
+
+nd the build information is defined in `docker-compose-build.yaml`
+
 Build and publish the docker images by
 ```
 docker-compose -f docker-compose-build.yaml build --parallel
@@ -76,10 +80,11 @@ View related files are in: `./udacity-c3-deployment/aws/`
 **Troubleshoot:** When `terraform apply`
 > Error: Error launching source instance: UnauthorizedOperation: You are not authorized to perform this operation.  
 
-1. If you are using AWS Educate/Student account, there are certain restrictions on what kinds of EC2 instance you can provision, the default `t3.medium` is not available. I tried different kinds of machines but was not able to get it stood up. So I go back to the regular Free Tier AWS account, *Note: `t3.medium` dose not count towards in the Free Tier 750hr quota. It costs real $$. Don’t forget to turn it down.*
+1. If you are using AWS Educate/Student account, there are certain restrictions on what kinds of EC2 instance you can provision, the default `t3.medium` is not available. I tried different kinds of machines but was not able to get it stood up. So I go back to the regular Free Tier AWS account. **Note: `t3.medium` dose not count towards in the Free Tier 750hr quota. It costs real $$. Don’t forget to turn it down.**
 2. Temporarily add AdministratorAccess to your IAM user.
 ### Deploy service to Kubernetes
 Update all the files in `./udacity-c3-deployment/k8s/`
+
 Run the following commands in the exact order,
 ```
 kubectl apply -f env-configmap.yaml
@@ -99,7 +104,9 @@ You can run `kubectl get pods` in between to check if the service is successfull
 > Pod status: CrashLoopBackOff  
 
 Use `kubectl logs <your_pod_name>` to check what is causing the crash.
+
 For me, I forgot the `-n` when converting the credential to base64.
+
 The correct usage is 
 `echo -n <your_credential> | base64`
 ### Port-forwarding to connect to the service.
