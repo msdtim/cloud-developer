@@ -11,14 +11,14 @@ Project Code:  [In this Repo](https://github.com/msdtim/cloud-developer/tree/mas
 ## Course 2: Full Stack Apps on AWS
 Project Description:  [Udagram: Your Own Instagram on AWS](https://classroom.udacity.com/nanodegrees/nd9990/parts/5d4b2317-8333-47b3-a9ec-ea2cf0a3efbb/modules/ab95831d-3105-400e-9c49-01a9d85e5a65/lessons/9e6a97ea-9a83-4505-9f40-d00b6d2f2e6f/project) 
  
-Project Code:  [Dir In this Repo](https://github.com/msdtim/cloud-developer/tree/master/course-02/project/image-filter-starter-code)
+Project Code:  [In this Repo](https://github.com/msdtim/cloud-developer/tree/master/course-02/project/image-filter-starter-code)
  
 Project Description:  [Optimize Your GitHub Profile](https://classroom.udacity.com/nanodegrees/nd9990/parts/5d4b2317-8333-47b3-a9ec-ea2cf0a3efbb/modules/13e55359-f66a-4f33-afdb-c193711bf657/lessons/de38d0de-afac-4d34-a339-25c2519cf9f9/project) 
 
 ## Course 3: Monolith to Microservices at Scale
 Project Description:  [Refactor Udagram app into Microservices and Deploy](https://classroom.udacity.com/nanodegrees/nd9990/parts/96fffeca-63e0-4bfc-92a6-a869b5b64b9e/modules/8c55d5a1-ae41-4313-ab37-86b1f35b9ada/lessons/6074169c-aed3-4448-98df-3927a919c664/project) 
 
-Project Code:  [Dir In this Repo](https://github.com/msdtim/cloud-developer/tree/master/course-03/exercises)
+Project Code:  [In this Repo](https://github.com/msdtim/cloud-developer/tree/master/course-03/exercises)
 
 ## Course 4: Develop & Deploy Serverless App
 Project Description:  [Serverless Application](https://classroom.udacity.com/nanodegrees/nd9990/parts/a46aa194-de1d-45fd-83ef-d83080ee8f3c/modules/826241f6-8d5f-436b-b01e-4ea8885d866d/lessons/ebb8bbbd-fd1d-4ca5-a4f9-30f2bc139acd/project) 
