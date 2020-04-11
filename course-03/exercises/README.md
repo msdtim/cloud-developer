@@ -84,6 +84,11 @@ View related files are in: `./udacity-c3-deployment/aws/`
 
 1. If you are using AWS Educate/Student account, there are certain restrictions on what kinds of EC2 instance you can provision, the default `t3.medium` is not available. I tried different kinds of machines but was not able to get it stood up. So I go back to the regular Free Tier AWS account. **Note: `t3.medium` dose not count towards in the Free Tier 750hr quota. It costs real $$. Don’t forget to turn it down.**
 2. Temporarily add AdministratorAccess to your IAM user.
+
+> failed to connect to 3.123.26.231: could not establish connection to 3.123.26.231:22: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none publickey], no supported methods remain node=3.123.26.231
+
+Run `ssh-add`, according to this [comment](https://github.com/kubermatic/kubeone/issues/458#issuecomment-493743020)
+
 ### Deploy service to Kubernetes
 Update all the files in `./udacity-c3-deployment/k8s/`
 
