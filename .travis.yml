@@ -23,10 +23,10 @@ install:
   - docker-compose -f course-03/exercises/udacity-c3-deployment/docker/docker-compose-build.yaml build --parallel 
   - docker login --username=${DOCKER_USERNAME} --password=${DOCKER_PASSWORD}
   - docker-compose -f course-03/exercises/udacity-c3-deployment/docker/docker-compose-build.yaml push
-  - kubectl apply -f udacity-c3-deployment/k8s/backend-feed-deployment.yaml
-  - kubectl apply -f udacity-c3-deployment/k8s/backend-user-deployment.yaml
-  - kubectl apply -f udacity-c3-deployment/k8s/frontend-deployment.yaml
-  - kubectl apply -f udacity-c3-deployment/k8s/reverseproxy-deployment.yaml
+  # - kubectl apply -f udacity-c3-deployment/k8s/backend-feed-deployment.yaml
+  # - kubectl apply -f udacity-c3-deployment/k8s/backend-user-deployment.yaml
+  # - kubectl apply -f udacity-c3-deployment/k8s/frontend-deployment.yaml
+  # - kubectl apply -f udacity-c3-deployment/k8s/reverseproxy-deployment.yaml
 
 branches:
   only:
