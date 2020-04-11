@@ -7,6 +7,11 @@ metadata:
   name: reverseproxy
 spec:
   replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 25%
   selector:
     matchLabels:
       service: reverseproxy
