@@ -5,7 +5,12 @@ metadata:
     service: backend-feed
   name: backend-feed
 spec:
-  replicas: 1
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 25%
   selector:
     matchLabels:
       service: backend-feed
