@@ -15,7 +15,7 @@ before_install:
   - chmod +x ./kubectl
   - sudo mv ./kubectl /usr/local/bin/kubectl
   - mkdir ${HOME}/.kube
-  - cp ./udacity-c3-deployment/aws/kubeone/udagram-kubeconfig ${HOME}/.kube/config
+  - cp ./course-03/exercises/udacity-c3-deployment/aws/kubeone/udagram-kubeconfig ${HOME}/.kube/config
 
 
 
