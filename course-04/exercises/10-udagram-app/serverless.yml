@@ -32,6 +32,7 @@ provider:
     THUMBNAILS_S3_BUCKET: serverless-udagram-msdtim-thumbnail-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
     CONNECTIONS_TABLE: Connections-${self:provider.stage}
+    AUTH_0_SECRET: FisVU-I-zc-wzRvi9LAPzpjMfL870as9hE3RAfp72UGtrdMrA1ESa5ayDtyIDUZy
 
   iamRoleStatements:
     - Effect: Allow
@@ -67,6 +68,9 @@ provider:
       Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.CONNECTIONS_TABLE}
 
 functions:
+  Auth:
+    handler: src/lambda/auth/auth0Authorizer.handler
+
   GetGroups:
     handler: src/lambda/http/getGroups.handler
     events: 
@@ -80,7 +84,8 @@ functions:
       - http: 
           method: post
           path: groups
-          cors: true      
+          cors: true    
+          authorizer: Auth
           request:
             # Schema that will be used to validate incoming requests
             schema:
@@ -106,6 +111,7 @@ functions:
           method: post
           path: groups/{groupId}/images
           cors: true
+          authorizer: Auth
           request:
             # Schema that will be used to validate incoming requests
             schema:
@@ -161,6 +167,17 @@ functions:
 
 resources:
   Resources:
+
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
     GroupsDynamoDBTable:
       Type: AWS::DynamoDB::Table
       Properties:
