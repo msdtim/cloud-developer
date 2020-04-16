@@ -3,12 +3,18 @@ import 'source-map-support/register'
 
 import { verify } from 'jsonwebtoken'
 import { JwtToken } from '../../auth/JwtToken'
+import * as AWS from 'aws-sdk'
 
-const secret = process.env.AUTH_0_SECRET
+const secretId = process.env.AUTH_0_SECRET_ID
+const secretField = process.env.AUTH_0_SECRET_FIELD
+
+const client = new AWS.SecretsManager()
+
+let cachedSecret: string
 
 export const handler: CustomAuthorizerHandler = async (event: CustomAuthorizerEvent): Promise<CustomAuthorizerResult> => {
   try {
-    const decodedToken = verifyToken(
+    const decodedToken = await verifyToken(
       event.authorizationToken
     )
     console.log('User was authorized')
@@ -45,7 +51,7 @@ export const handler: CustomAuthorizerHandler = async (event: CustomAuthorizerEv
   }
 }
 
-function verifyToken(authHeader: string): JwtToken {
+async function verifyToken(authHeader: string): Promise<JwtToken> {
   if (!authHeader) {
     throw new Error('No auth header')
   }
@@ -56,8 +62,24 @@ function verifyToken(authHeader: string): JwtToken {
   const split = authHeader.split(' ')
   const token = split[1]
 
+  const secretObject: any = await getSecret()
+  const secret = secretObject[secretField]
+
   return verify(token, secret) as JwtToken
 
   // A request has been authorized.
 }
 
+async function getSecret() {
+  if (cachedSecret) return cachedSecret
+
+  const data = await client
+    .getSecretValue({
+      SecretId: secretId
+    })
+    .promise()
+
+    cachedSecret = data.SecretString
+
+    return JSON.parse(cachedSecret)
+}
