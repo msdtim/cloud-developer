@@ -26,6 +26,7 @@ plugins:
   - serverless-webpack
   - serverless-dynamodb-local
   - serverless-offline
+  - serverless-plugin-canary-deployments
 
 provider:
   name: aws
@@ -49,6 +50,11 @@ provider:
     AUTH_0_SECRET_FIELD: auth0Secret
 
   iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - codedeploy:*
+      Resource:
+        - '*'
     - Effect: Allow
       Action:
         - dynamodb:Scan
@@ -115,6 +121,9 @@ functions:
             # Schema that will be used to validate incoming requests
             schema:
               application/json: ${file(models/create-group-request.json)}
+    deploymentSettings:
+      type: Linear10PercentEvery1Minute
+      alias: Live
   GetImages:
     handler: src/lambda/http/getImages.handler
     events:
