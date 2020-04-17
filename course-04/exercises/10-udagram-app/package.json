@@ -23,6 +23,8 @@
     "serverless-aws-documentation": "^1.1.0",
     "serverless-reqvalidator-plugin": "^1.0.3",
     "serverless-webpack": "^5.2.0",
+    "serverless-offline": "^4.10.6",
+    "serverless-dynamodb-local": "^0.2.38",
     "ts-loader": "^5.3.3",
     "typescript": "^3.2.4",
     "webpack": "^4.29.0",
