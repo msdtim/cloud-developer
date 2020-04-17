@@ -10,6 +10,8 @@
     "elasticsearch": "^15.5.0",
     "http-aws-es": "^6.0.0",
     "jimp": "^0.6.4",
+    "jsonwebtoken": "^8.5.1",
+    "middy": "^0.36.0",
     "source-map-support": "^0.5.10"
   },
   "devDependencies": {
