@@ -27,6 +27,9 @@ plugins:
   - serverless-dynamodb-local
   - serverless-offline
   - serverless-plugin-canary-deployments
+# Uncomment to enable individual packaging
+package:
+  individually: true
 
 provider:
   tracing:
