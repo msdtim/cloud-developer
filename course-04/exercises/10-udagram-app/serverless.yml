@@ -29,6 +29,11 @@ plugins:
   - serverless-plugin-canary-deployments
 
 provider:
+  tracing:
+    lambda: true
+    apiGateway: true
+
+
   name: aws
   runtime: nodejs12.x
 

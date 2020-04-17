@@ -1,8 +1,11 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import 'source-map-support/register'
 import * as AWS  from 'aws-sdk'
+//import * as AWSXRay from 'aws-xray-sdk'
+const AWSXRay = require('aws-xray-sdk')
+const XAWS = AWSXRay.captureAWS(AWS)
 
-const docClient = new AWS.DynamoDB.DocumentClient()
+const docClient = new XAWS.DynamoDB.DocumentClient()
 
 const imagesTable = process.env.IMAGES_TABLE
 const imageIdIndex = process.env.IMAGE_ID_INDEX
